@@ -1,0 +1,15 @@
+﻿@model IEnumerable<WebUI.Models.BlogModels.PostModel>
+
+@{
+    ViewBag.Title = "AllPosts";
+}
+
+<h2>All Posts</h2>
+
+<div class="blog">
+    @foreach(var post in Model)
+    {
+        <hr />@Html.Partial("_PostPartial", post)
+    }
+</div>
+

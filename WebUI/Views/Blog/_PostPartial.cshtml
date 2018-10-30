@@ -1,0 +1,45 @@
+﻿@model WebUI.Models.BlogModels.PostModel
+
+<div class="post well">
+    <table class="table-bordered well">
+        <tr>
+            <th>@Model.Author <br /> @Model.Date</th>
+            <th colspan="3">@Model.Title</th>
+        </tr>
+        <tr>
+            <td colspan="4">@Model.Body</td>
+        </tr>
+        <tr>
+            <td colspan="4">
+                @foreach (var comment in Model.Comments)
+                {
+                    @Html.Partial("_CommentPartial", comment)
+                }
+            </td> 
+        </tr>
+    </table>
+</div>
+
+@*<div class="post">
+    <div class="row">
+        <div class="col-sm-2 text-left">
+            @Model.Author <br /> @Model.Date
+        </div>
+        <div class="col-sm-2 text-center">
+            @Model.Title
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            @Model.Body
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-5 text-right">
+            @foreach(var comment in Model.Comments)
+            {
+                @Html.Partial("_CommentPartial", comment)
+            }
+        </div>
+    </div>
+</div>*@
