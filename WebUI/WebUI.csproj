@@ -165,11 +165,14 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="HtmlHelpers\PagingHelper.cs" />
     <Compile Include="Models\AccountModels\LoginModel.cs" />
     <Compile Include="Models\AccountModels\ProfileModel.cs" />
     <Compile Include="Models\AccountModels\RegisterModel.cs" />
     <Compile Include="Models\BlogModels\CommentModel.cs" />
+    <Compile Include="Models\BlogModels\PostListViewModel.cs" />
     <Compile Include="Models\BlogModels\PostModel.cs" />
+    <Compile Include="Models\BlogModels\PostPagingInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\AutofacConfig.cs" />
   </ItemGroup>

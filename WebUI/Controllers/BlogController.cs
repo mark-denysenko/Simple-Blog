@@ -22,21 +22,43 @@ namespace WebUI.Controllers
 
         public ActionResult AllPosts(int page = 1)
         {
-            return View(GetPosts()
+            PostListViewModel model = new PostListViewModel
+            {
+                Posts = GetPosts()
                 .OrderByDescending(p => p.Date)
-                .Skip(page - 1)
+                .Skip((page - 1) * POST_PER_PAGE)
                 .Take(POST_PER_PAGE)
-                .ToList());
+                .ToList(),
+                PagingInfo = new PostPagingInfo
+                {
+                    CurrentPage = page,
+                    ItemsPerPage = POST_PER_PAGE,
+                    TotalItems = uow.Posts.GetAll().Count()
+                }
+            };
+
+            return View(model);
         }
 
         [Authorize]
         public ActionResult UserPosts(int page = 1)
         {
-            return View(GetPosts(User.Identity.Name)
+            PostListViewModel model = new PostListViewModel
+            {
+                Posts = GetPosts(User.Identity.Name)
                 .OrderByDescending(p => p.Date)
-                .Skip(page - 1)
+                .Skip((page - 1) * POST_PER_PAGE)
                 .Take(POST_PER_PAGE)
-                .ToList());
+                .ToList(),
+                PagingInfo = new PostPagingInfo
+                {
+                    CurrentPage = page,
+                    ItemsPerPage = POST_PER_PAGE,
+                    TotalItems = GetPosts().Where(p => p.Author == User.Identity.Name).Count()
+                }
+            };
+
+            return View(model);
         }
 
         private IEnumerable<PostModel> GetPosts(string userName = null)
