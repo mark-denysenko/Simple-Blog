@@ -1,0 +1,32 @@
+﻿@model WebUI.Models.BlogModels.PostModel
+
+@{
+    ViewBag.Title = "Post " + Model.Id;
+}
+
+@*@Html.Partial("_PostPartial", Model)*@
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8">
+            <h1 class="title">@Model.Title</h1>
+            <p class="author">
+                by <a href="#">@Model.Author</a>
+            </p>
+            <hr />
+            <p>Posted on @Model.Date</p>
+            <hr />
+            <div>
+                <p>@Model.Body</p>
+            </div>
+            <hr />
+            <!--Comment form-->
+            @Html.Partial("_MakeCommentPartial", Model.Id)
+            <!--Comments-->
+            @foreach (var comment in Model.Comments)
+            {
+                @Html.Partial("_CommentPartial", comment)
+            }
+        </div>
+    </div>
+</div>

@@ -1,0 +1,14 @@
+﻿@model int
+
+<div class="well MakeComment">
+    <h3>Leave a comment</h3>
+    @using (Html.BeginForm("MakeComment", "Blog", FormMethod.Post))
+    {
+        <input type="hidden" value="@User.Identity.Name" name="Author" />
+        <input type="hidden" value="@Model" name="PostId" />
+        <div class="form-group">
+            @Html.TextArea("body", "", 5, 50, new { maxlength = "100", required = "true" })
+        </div>
+        <button type="submit" class="btn btn-primary" value="Submit">Submit</button>
+    }
+</div>

@@ -10,5 +10,6 @@ namespace WebUI.Models.BlogModels
         public string Author { get; set; }
         public string Body { get; set; }
         public DateTime Date { get; set; }
+        public int PostId { get; set; }
     }
 }

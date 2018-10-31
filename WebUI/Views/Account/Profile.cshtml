@@ -1,0 +1,62 @@
+﻿@model WebUI.Models.AccountModels.ProfileModel
+
+@{
+    ViewBag.Title = "Profile";
+}
+
+<h2>Your profile info</h2>
+
+<div>
+    <h4>Information</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.UserId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Nickname)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nickname)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PasswordHash)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PasswordHash)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TotalPosts)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TotalPosts)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TotalComments)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TotalComments)
+        </dd>
+
+    </dl>
+</div>

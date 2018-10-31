@@ -166,6 +166,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountModels\LoginModel.cs" />
+    <Compile Include="Models\AccountModels\ProfileModel.cs" />
     <Compile Include="Models\AccountModels\RegisterModel.cs" />
     <Compile Include="Models\BlogModels\CommentModel.cs" />
     <Compile Include="Models\BlogModels\PostModel.cs" />
@@ -215,6 +216,12 @@
     <Content Include="Views\Blog\_PostPartial.cshtml" />
     <Content Include="Views\Blog\_CommentPartial.cshtml" />
     <Content Include="Views\Blog\AllPosts.cshtml" />
+    <Content Include="Views\Blog\UserPosts.cshtml" />
+    <Content Include="Views\Blog\MakePost.cshtml" />
+    <Content Include="Views\Account\Profile.cshtml" />
+    <Content Include="Views\Blog\_MakeCommentPartial.cshtml" />
+    <Content Include="Views\Blog\_PostPreview.cshtml" />
+    <Content Include="Views\Blog\PostInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

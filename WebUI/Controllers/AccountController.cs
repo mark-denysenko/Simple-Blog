@@ -89,6 +89,24 @@ namespace WebUI.Controllers
         }
 
         [Authorize]
+        public ActionResult Profile()
+        {
+            User currentUser = uow.Users.GetAll().Single(u => u.Nickname == User.Identity.Name);
+
+            ProfileModel userInfo = new ProfileModel
+            {
+                Email = currentUser.Email,
+                Nickname = currentUser.Nickname,
+                PasswordHash = currentUser.PasswordHash,
+                UserId = currentUser.UserId,
+                TotalComments = currentUser.Comments.Count,
+                TotalPosts = currentUser.Posts.Count
+            };
+
+            return View(userInfo);
+        }
+
+        [Authorize]
         public ActionResult Logout()
         {
             FormsAuthentication.SignOut();
@@ -99,7 +117,7 @@ namespace WebUI.Controllers
         {
             if (returnUrl != null && Url.IsLocalUrl(returnUrl))
             {
-                return Redirect(returnUrl);
+                //return Redirect(returnUrl);
             }
             return RedirectToAction("Index", "Home");
         }

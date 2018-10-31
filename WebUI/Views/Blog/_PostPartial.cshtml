@@ -1,16 +1,28 @@
 ﻿@model WebUI.Models.BlogModels.PostModel
 
-<div class="post well">
-    <table class="table-bordered well">
+<h1>Change rendering partial view From _PostPartial to PostInfo</h1>
+
+@*<style>
+    .post
+    {
+        table-layout: fixed;
+        width: 100%;
+    }
+</style>
+
+<div class="well">
+    <table class="table-bordered post" >
         <tr>
             <th>@Model.Author <br /> @Model.Date</th>
-            <th colspan="3">@Model.Title</th>
+            <th colspan="3"><h2>@Model.Title</h2></th>
+            <div class="formg"></div>
         </tr>
         <tr>
             <td colspan="4">@Model.Body</td>
         </tr>
         <tr>
             <td colspan="4">
+                @Html.Partial("_MakeCommentPartial", Model.Id)
                 @foreach (var comment in Model.Comments)
                 {
                     @Html.Partial("_CommentPartial", comment)
@@ -18,8 +30,8 @@
             </td> 
         </tr>
     </table>
-</div>
-
+</div>*@
+-----------------------------------------------------------------------
 @*<div class="post">
     <div class="row">
         <div class="col-sm-2 text-left">
