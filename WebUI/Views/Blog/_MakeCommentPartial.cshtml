@@ -7,7 +7,7 @@
         <input type="hidden" value="@User.Identity.Name" name="Author" />
         <input type="hidden" value="@Model" name="PostId" />
         <div class="form-group">
-            @Html.TextArea("body", "", 5, 50, new { maxlength = "100", required = "true" })
+            @Html.TextArea("body", "", 5, 100, new { maxlength = "200", required = "true" })
         </div>
         <button type="submit" class="btn btn-primary" value="Submit">Submit</button>
     }

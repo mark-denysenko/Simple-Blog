@@ -1,6 +1,7 @@
 ﻿using Core;
 using Interfaces;
 using Services;
+using Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +15,12 @@ namespace WebUI.Controllers
     public class AccountController : Controller
     {
         private IUnitOfWork uow;
+        private IHasherPassword hasherPassword;
 
-        public AccountController(IUnitOfWork repo)
+        public AccountController(IUnitOfWork repo, IHasherPassword hasher)
         {
             this.uow = repo;
+            this.hasherPassword = hasher;
         }
 
         public ActionResult Login()
@@ -31,7 +34,7 @@ namespace WebUI.Controllers
         {
             if (ModelState.IsValid)
             {
-                string passwordHash = new HasherPassword().GetHash(model.Password);
+                string passwordHash = hasherPassword.GetHash(model.Password);
                 uow.Users.GetAll();
                 User user = uow.Users.GetAll()
                     .FirstOrDefault(u => u.Nickname == model.Nickname && u.PasswordHash == passwordHash);
@@ -66,7 +69,7 @@ namespace WebUI.Controllers
 
                 if (user == null)
                 {
-                    string passwordHash = new HasherPassword().GetHash(model.Password);
+                    string passwordHash = hasherPassword.GetHash(model.Password);
                     uow.Users.Create(new User { Nickname = model.Nickname, Email = model.Email, PasswordHash = passwordHash });
                     uow.Users.Save();
 

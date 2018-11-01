@@ -6,17 +6,37 @@
 
 @*@Html.Partial("_PostPartial", Model)*@
 
+<style>
+    .delete-form 
+    {
+        color: red;
+    }
+    .post-body 
+    {
+        font-weight: 400;
+        font-size: 20px;
+        word-wrap: break-word;
+    }
+</style>
+
 <div class="container">
     <div class="row">
         <div class="col-lg-8">
             <h1 class="title">@Model.Title</h1>
+            @if (User.Identity.Name == Model.Author)
+            {
+                using (Html.BeginForm("DeletePost", "Blog", FormMethod.Post, new { @class = "navbar-right delete-form" }))
+                {
+                    <input type="hidden" name="id" value="@Model.Id"/>
+                    <button type="submit" value="Delete" class="btn btn-primary">Delete post</button>
+                }
+            }
+            @*@Html.ActionLink("Delete", "DeletePost", new { id = Model.Id }, new { @class = "pull-right delete-link" })*@
             <p class="author">
-                by <a href="#">@Model.Author</a>
+                Posted by <a href="#">@Model.Author</a> on @Model.Date
             </p>
             <hr />
-            <p>Posted on @Model.Date</p>
-            <hr />
-            <div>
+            <div class="post-body">
                 <p>@Model.Body</p>
             </div>
             <hr />

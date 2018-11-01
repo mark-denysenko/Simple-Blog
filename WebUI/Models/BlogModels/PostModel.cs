@@ -9,7 +9,9 @@ namespace WebUI.Models.BlogModels
     public class PostModel
     {
         public int Id { get; set; }
+        [Required]
         public string Title { get; set; }
+        [Required]
         [DataType(DataType.MultilineText)]
         public string Body { get; set; }
         [DataType(DataType.DateTime)]

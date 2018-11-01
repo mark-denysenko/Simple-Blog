@@ -90,8 +90,11 @@ namespace WebUI.Controllers
             return posts;
         }
 
-        public ActionResult PostInfo(int id)
+        public ActionResult PostInfo(int? id)
         {
+            if (!id.HasValue)
+                return RedirectToAction("AllPosts");
+
             PostModel post = GetPosts().Single(p => p.Id == id);
 
             return View(post);
@@ -142,6 +145,22 @@ namespace WebUI.Controllers
             uow.Comments.Save();
 
             return RedirectToAction("PostInfo", new { id = model.PostId });
+        }
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult DeletePost(int id)
+        {
+            string postAuthor = GetPosts().Single(p => p.Id == id).Author;
+
+            if(postAuthor == User.Identity.Name)
+            {
+                uow.Posts.Delete(id);
+                uow.Posts.Save();
+                return RedirectToAction("AllPosts", "Blog");
+            }
+
+            return View("PostInfo", GetPosts().Single(p => p.Id == id));
         }
     }
 }

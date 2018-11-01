@@ -8,7 +8,9 @@ namespace WebUI.Models.AccountModels
 {
     public class LoginModel
     {
+        [Required]
         public string Nickname { get; set; }
+        [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
     }

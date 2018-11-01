@@ -8,6 +8,8 @@ using Autofac.Integration.Mvc;
 using System.Web.Mvc;
 using EFProvider;
 using Interfaces;
+using Services;
+using Services.Interfaces;
 
 namespace WebUI.Util
 {
@@ -20,6 +22,7 @@ namespace WebUI.Util
             builder.RegisterControllers(typeof(MvcApplication).Assembly);
 
             builder.RegisterType<EFUnitOfWork>().As<IUnitOfWork>();
+            builder.RegisterType<HasherPassword>().As<IHasherPassword>();
 
             var container = builder.Build();
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));

@@ -1,17 +1,26 @@
 ﻿@model WebUI.Models.BlogModels.CommentModel
 
+<style>
+    .comment-body 
+    {
+        font-style: italic;
+        padding: 5px 20px;
+    }
+    .comment {
+        padding: 10px 20px;
+    }
+</style>
+
 <div class="comment well">
     <div class="row">
-        <div class="col-lg-2">
-            @Model.Author
-        </div>
-        <div class="col-lg-2">
-            @Model.Date
+        <div class="col-lg-10">
+            Comment from <b class="author">@Model.Author</b>
+            <p class="comment-date pull-right">@Model.Date</p>
         </div>
     </div>
-    <div class="row">
-        <div class="col-lg-4">
-            @Model.Body
+    <div class="row comment-body">
+        <div class="col-lg-10 well">
+            <p>@Model.Body</p>
         </div>
     </div>
 </div>
