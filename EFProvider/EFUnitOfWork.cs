@@ -1,9 +1,5 @@
 ﻿using System;
 using Interfaces;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Core;
 using System.Data.Entity;
 
@@ -14,17 +10,17 @@ namespace EFProvider
         private EFBlogContext db = new EFBlogContext();
 
         #region Implementation UoW 
-        private IRepository<Post> postRepository;
-        private IRepository<User> userRepository;
-        private IRepository<Comment> commentRepository;
+        private IRepository<Post> _postRepository;
+        private IRepository<User> _userRepository;
+        private IRepository<Comment> _commentRepository;
 
         public IRepository<Post> Posts
         {
             get
             {
-                if (postRepository == null)
-                    postRepository = new EFPostRepository(db);
-                return postRepository;
+                if (_postRepository == null)
+                    _postRepository = new EFPostRepository(db);
+                return _postRepository;
             }
         }
 
@@ -32,9 +28,9 @@ namespace EFProvider
         {
             get
             {
-                if (userRepository == null)
-                    userRepository = new EFUserRepository(db);
-                return userRepository;
+                if (_userRepository == null)
+                    _userRepository = new EFUserRepository(db);
+                return _userRepository;
             }
         }
 
@@ -42,19 +38,11 @@ namespace EFProvider
         {
             get
             {
-                if (commentRepository == null)
-                    commentRepository = new EFCommentRepository(db);
-                return commentRepository;
+                if (_commentRepository == null)
+                    _commentRepository = new EFCommentRepository(db);
+                return _commentRepository;
             }
         }
-        #endregion
-
-        #region but DB sets its like repository EF implementation
-
-        public DbSet<User> UsersDB { get { return db.Users; } }
-        public DbSet<Post> PostsDB { get { return db.Posts; } }
-        public DbSet<Comment> CommentsDB { get { return db.Comments; } }
-
         #endregion
 
         public void Save()

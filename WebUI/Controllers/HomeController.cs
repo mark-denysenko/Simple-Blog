@@ -9,17 +9,20 @@ namespace WebUI.Controllers
 {
     public class HomeController : Controller
     {
-        private IUnitOfWork uow;
-
-        public HomeController(IUnitOfWork repo)
-        {
-            uow = repo;
-        }
-
+        //[HandleError(View = "DefaultError")]
         public ActionResult Index()
         {
             return View();
         }
 
+        public ActionResult DefaultError()
+        {
+            return View();
+        }
+
+        public ActionResult Error404()
+        {
+            return View();
+        }
     }
 }

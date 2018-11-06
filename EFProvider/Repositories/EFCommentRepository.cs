@@ -2,9 +2,8 @@
 using Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EFProvider
 {
@@ -31,12 +30,12 @@ namespace EFProvider
 
         public Comment Get(int id)
         {
-            return db.Comments.Find(id);
+            return db.Comments.FirstOrDefault(c => c.CommentId == id);
         }
 
-        public IEnumerable<Comment> GetAll()
+        public IQueryable<Comment> GetAll()
         {
-            return db.Comments;
+            return db.Comments.AsQueryable();
         }
 
         public void Save()
@@ -73,5 +72,10 @@ namespace EFProvider
             GC.SuppressFinalize(this);
         }
         #endregion
+
+        public int Count()
+        {
+            return db.Comments.Count();
+        }
     }
 }

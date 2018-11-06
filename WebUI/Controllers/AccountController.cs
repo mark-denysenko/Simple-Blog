@@ -4,23 +4,25 @@ using Services;
 using Services.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using BusinessLayer.BusinessModelsDTO;
+using BusinessLayer.Interfaces;
 using WebUI.Models.AccountModels;
+using WebUI.Util;
 
 namespace WebUI.Controllers
 {
     public class AccountController : Controller
     {
-        private IUnitOfWork uow;
-        private IHasherPassword hasherPassword;
+        private readonly IAccountService _accountService;
 
-        public AccountController(IUnitOfWork repo, IHasherPassword hasher)
+        public AccountController(IAccountService accountService)
         {
-            this.uow = repo;
-            this.hasherPassword = hasher;
+            _accountService = accountService;
         }
 
         public ActionResult Login()
@@ -34,14 +36,9 @@ namespace WebUI.Controllers
         {
             if (ModelState.IsValid)
             {
-                string passwordHash = hasherPassword.GetHash(model.Password);
-                uow.Users.GetAll();
-                User user = uow.Users.GetAll()
-                    .FirstOrDefault(u => u.Nickname == model.Nickname && u.PasswordHash == passwordHash);
-
-                if(user != null)
+                if (_accountService.Login(model.Nickname, model.Password))
                 {
-                    FormsAuthentication.SetAuthCookie(user.Nickname, true);
+                    FormsAuthentication.SetAuthCookie(model.Nickname, true);
                     return RedirectToLocal(returnUrl);
                 }
                 else
@@ -52,6 +49,7 @@ namespace WebUI.Controllers
 
             return View(model);
         }
+
 
         public ActionResult Register()
         {
@@ -64,23 +62,10 @@ namespace WebUI.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = uow.Users.GetAll()
-                    .FirstOrDefault(u => u.Nickname == model.Nickname || u.Email == model.Email);
-
-                if (user == null)
+                if (_accountService.Register(model.Nickname, model.Password, model.Email))
                 {
-                    string passwordHash = hasherPassword.GetHash(model.Password);
-                    uow.Users.Create(new User { Nickname = model.Nickname, Email = model.Email, PasswordHash = passwordHash });
-                    uow.Users.Save();
-
-                    user = uow.Users.GetAll()
-                        .FirstOrDefault(u => u.Nickname == model.Nickname && u.PasswordHash == passwordHash);
-
-                    if (user != null)
-                    {
-                        FormsAuthentication.SetAuthCookie(user.Nickname, true);
-                        return RedirectToLocal(returnUrl);
-                    }
+                    FormsAuthentication.SetAuthCookie(model.Nickname, true);
+                    return RedirectToLocal(returnUrl);
                 }
                 else
                 {
@@ -92,21 +77,21 @@ namespace WebUI.Controllers
         }
 
         [Authorize]
-        public ActionResult Profile()
+        public new ActionResult Profile()
         {
-            User currentUser = uow.Users.GetAll().Single(u => u.Nickname == User.Identity.Name);
+            UserProfile profile = _accountService.GetUserProfile(User.Identity.Name);
 
-            ProfileModel userInfo = new ProfileModel
-            {
-                Email = currentUser.Email,
-                Nickname = currentUser.Nickname,
-                PasswordHash = currentUser.PasswordHash,
-                UserId = currentUser.UserId,
-                TotalComments = currentUser.Comments.Count,
-                TotalPosts = currentUser.Posts.Count
-            };
+            //var userInfo = new ProfileModel
+            //{
+            //    Email = currentUser.Email,
+            //    Nickname = currentUser.Nickname,
+            //    PasswordHash = currentUser.PasswordHash,
+            //    UserId = currentUser.UserId,
+            //    TotalComments = currentUser.Comments.Count,
+            //    TotalPosts = currentUser.Posts.Count
+            //};
 
-            return View(userInfo);
+            return View(profile);
         }
 
         [Authorize]
@@ -125,12 +110,18 @@ namespace WebUI.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [HttpPost]
+        public ActionResult SetUserPhoto()
+        {
+            HttpPostedFileBase file = HttpContext.Request.Files["UserAvatar"];
+            if (file?.ContentLength > 0)
+            {
+                string avatarName = User.Identity.Name + Path.GetExtension(file.FileName);
+                var path = Path.Combine(Server.MapPath(MyConfiguration.USER_AVATAR_PATH), avatarName);
+                file.SaveAs(path);
+            }
 
-        // ????
-        //protected override void Dispose(bool disposing)
-        //{
-        //    uow.Dispose();
-        //    base.Dispose(disposing);
-        //}
+            return RedirectToAction("Profile");
+        }
     }
 }

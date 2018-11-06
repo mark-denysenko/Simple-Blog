@@ -2,9 +2,8 @@
 using Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EFProvider
 {
@@ -31,12 +30,12 @@ namespace EFProvider
 
         public Post Get(int id)
         {
-            return db.Posts.Find(id);
+            return db.Posts.FirstOrDefault(p => p.PostId == id);
         }
 
-        public IEnumerable<Post> GetAll()
+        public IQueryable<Post> GetAll()
         {
-            return db.Posts;
+            return db.Posts.AsQueryable();
         }
 
         public void Save()
@@ -84,5 +83,9 @@ namespace EFProvider
         }
         #endregion
 
+        public int Count()
+        {
+            return db.Posts.Count();
+        }
     }
 }

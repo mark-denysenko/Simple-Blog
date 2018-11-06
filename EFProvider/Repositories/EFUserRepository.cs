@@ -3,8 +3,6 @@ using Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EFProvider
 {
@@ -31,12 +29,12 @@ namespace EFProvider
 
         public User Get(int id)
         {
-            return db.Users.Find(id);
+            return db.Users.FirstOrDefault(u => u.UserId == id);
         }
 
-        public IEnumerable<User> GetAll()
+        public IQueryable<User> GetAll()
         {
-            return db.Users;
+            return db.Users.AsQueryable();
         }
 
         public void Save()
@@ -84,6 +82,9 @@ namespace EFProvider
         }
         #endregion
 
-
+        public int Count()
+        {
+            return db.Users.Count();
+        }
     }
 }

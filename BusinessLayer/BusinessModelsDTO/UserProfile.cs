@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace WebUI.Models.AccountModels
+namespace BusinessLayer.BusinessModelsDTO
 {
-    public class ProfileModel
+    public class UserProfile
     {
         public int UserId { get; set; }
         public string Email { get; set; }

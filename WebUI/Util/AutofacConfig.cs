@@ -6,6 +6,8 @@ using Autofac;
 using Autofac.Core;
 using Autofac.Integration.Mvc;
 using System.Web.Mvc;
+using BusinessLayer;
+using BusinessLayer.Interfaces;
 using EFProvider;
 using Interfaces;
 using Services;
@@ -23,6 +25,8 @@ namespace WebUI.Util
 
             builder.RegisterType<EFUnitOfWork>().As<IUnitOfWork>();
             builder.RegisterType<HasherPassword>().As<IHasherPassword>();
+            builder.RegisterType<AccountService>().As<IAccountService>();
+            builder.RegisterType<BlogService>().As<IBlogService>();
 
             var container = builder.Build();
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));

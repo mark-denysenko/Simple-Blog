@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Web;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace WebUI.Models.BlogModels
+namespace BusinessLayer.BusinessModelsDTO
 {
-    public class CommentModel
+    public class CommentDTO
     {
-        public int Id { get; set; }
+        public int CommentId { get; set; }
         public string Author { get; set; }
-        [Required]
         public string Body { get; set; }
         public DateTime Date { get; set; }
+
         public int PostId { get; set; }
     }
 }

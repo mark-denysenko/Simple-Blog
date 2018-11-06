@@ -53,3 +53,32 @@ A:hover {
     color: darkgray;
     text-decoration: underline;
 }
+
+.home-page {
+    min-height: 550px;
+    width: 1200px;
+    padding: 200px 0;
+    text-align:center;
+}
+
+.delete-form 
+{
+    color: red;
+}
+
+.post-body 
+{
+    font-weight: 400;
+    font-size: 20px;
+    word-wrap: break-word;
+}
+
+.comment-body 
+{
+    font-style: italic;
+    padding: 5px 20px;
+}
+
+.comment {
+    padding: 10px 20px;
+}

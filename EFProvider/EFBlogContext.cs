@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using Core;
 
 namespace EFProvider
@@ -14,8 +12,7 @@ namespace EFProvider
         public EFBlogContext()
             :base("EFBlogDb")
         {
-            //Database.SetInitializer<EFBlogContext>(new DropCreateDatabaseAlways<EFBlogContext>());
-
+            // Init values for DB (drop and create db each time)
             //Database.SetInitializer(new EFDbInitializer());
         }
     }

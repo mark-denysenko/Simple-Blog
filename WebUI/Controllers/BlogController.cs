@@ -6,34 +6,33 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using BusinessLayer.BusinessModelsDTO;
+using BusinessLayer.Interfaces;
 using WebUI.Models.BlogModels;
+using WebUI.Util;
 
 namespace WebUI.Controllers
 {
     public class BlogController : Controller
     {
-        private IUnitOfWork uow;
-        private const int POST_PER_PAGE = 5;
+        private readonly IBlogService _blogService;
+        private const int POST_PER_PAGE = MyConfiguration.POST_PER_PAGE;
 
-        public BlogController(IUnitOfWork repo)
+        public BlogController(IBlogService blogService)
         {
-            uow = repo;
+            _blogService = blogService;
         }
 
         public ActionResult AllPosts(int page = 1)
         {
-            PostListViewModel model = new PostListViewModel
+            var model = new PostListViewModel
             {
-                Posts = GetPosts()
-                .OrderByDescending(p => p.Date)
-                .Skip((page - 1) * POST_PER_PAGE)
-                .Take(POST_PER_PAGE)
-                .ToList(),
+                Posts = _blogService.GetPosts(POST_PER_PAGE, page),
                 PagingInfo = new PostPagingInfo
                 {
                     CurrentPage = page,
                     ItemsPerPage = POST_PER_PAGE,
-                    TotalItems = uow.Posts.GetAll().Count()
+                    TotalItems = _blogService.GetPosts().Count()
                 }
             };
 
@@ -43,51 +42,18 @@ namespace WebUI.Controllers
         [Authorize]
         public ActionResult UserPosts(int page = 1)
         {
-            PostListViewModel model = new PostListViewModel
+            var model = new PostListViewModel
             {
-                Posts = GetPosts(User.Identity.Name)
-                .OrderByDescending(p => p.Date)
-                .Skip((page - 1) * POST_PER_PAGE)
-                .Take(POST_PER_PAGE)
-                .ToList(),
+                Posts = _blogService.GetUserPosts(User.Identity.Name, POST_PER_PAGE, page),
                 PagingInfo = new PostPagingInfo
                 {
                     CurrentPage = page,
                     ItemsPerPage = POST_PER_PAGE,
-                    TotalItems = GetPosts().Where(p => p.Author == User.Identity.Name).Count()
+                    TotalItems = _blogService.GetUserPosts(User.Identity.Name).Count()
                 }
             };
 
             return View(model);
-        }
-
-        private IEnumerable<PostModel> GetPosts(string userName = null)
-        {
-            EFUnitOfWork db = uow as EFUnitOfWork;
-
-            var posts = db.PostsDB
-                .Include("User.Comments")
-                .Where(p => userName == null ? true : p.User.Nickname == userName)
-                .Select(p =>
-                new PostModel
-                {
-                    Id = p.PostId,
-                    Author = p.User.Nickname,
-                    Title = p.Title,
-                    Body = p.Body,
-                    Date = p.Date,
-                    Comments = p.Comments
-                    .Select(c =>
-                    new CommentModel
-                    {
-                        Author = c.User.Nickname,
-                        Body = c.Body,
-                        Date = c.Date
-                    }).ToList()
-                }
-                );
-
-            return posts;
         }
 
         public ActionResult PostInfo(int? id)
@@ -95,7 +61,7 @@ namespace WebUI.Controllers
             if (!id.HasValue)
                 return RedirectToAction("AllPosts");
 
-            PostModel post = GetPosts().Single(p => p.Id == id);
+            PostDTO post = _blogService.GetPost(id.Value);
 
             return View(post);
         }
@@ -112,16 +78,16 @@ namespace WebUI.Controllers
         {
             if(ModelState.IsValid)
             {
-                Post newPost = new Post
+                PostDTO newPost = new PostDTO
                 {
                     Title = model.Title,
                     Body = model.Body,
-                    Date = DateTime.Now,
-                    User = uow.Users.GetAll().Single(u => u.Nickname == User.Identity.Name)
+                    Date = DateTime.UtcNow,
+                    Author = User.Identity.Name
                 };
 
-                uow.Posts.Create(newPost);
-                uow.Posts.Save();
+                _blogService.MakePost(newPost);
+
                 return RedirectToAction("PostInfo", new { id = newPost.PostId });
             }
 
@@ -132,18 +98,16 @@ namespace WebUI.Controllers
         [HttpPost]
         public ActionResult MakeComment(CommentModel model)
         {
-            Post post = uow.Posts.Get(model.PostId);
-            Comment comment = new Comment
+            PostDTO post = _blogService.GetPost(model.PostId);
+            var comment = new CommentDTO
             {
                 Body = model.Body,
-                Date = DateTime.Now,
-                Post = post,
-                User = uow.Users.GetAll().Single(u => u.Nickname == User.Identity.Name)
+                Date = DateTime.UtcNow,
+                PostId = model.PostId,
+                Author = User.Identity.Name
             };
 
-            uow.Comments.Create(comment);
-            uow.Comments.Save();
-
+            _blogService.MakeComment(comment);
             return RedirectToAction("PostInfo", new { id = model.PostId });
         }
 
@@ -151,16 +115,19 @@ namespace WebUI.Controllers
         [HttpPost]
         public ActionResult DeletePost(int id)
         {
-            string postAuthor = GetPosts().Single(p => p.Id == id).Author;
+            PostDTO postToDelete = _blogService.GetPost(id);
 
-            if(postAuthor == User.Identity.Name)
+            if(postToDelete != null && postToDelete.Author == User.Identity.Name)
             {
-                uow.Posts.Delete(id);
-                uow.Posts.Save();
+                foreach(var comment in postToDelete.Comments)
+                {
+                    _blogService.DeleteComment(comment.CommentId);
+                }
+                _blogService.DeletePost(id);
                 return RedirectToAction("AllPosts", "Blog");
             }
 
-            return View("PostInfo", GetPosts().Single(p => p.Id == id));
+            return View("PostInfo", _blogService.GetPost(id));
         }
     }
 }
