@@ -10,6 +10,7 @@ using BusinessLayer.BusinessModelsDTO;
 using BusinessLayer.Interfaces;
 using WebUI.Models.BlogModels;
 using WebUI.Util;
+using WebUI.Validation.Filters;
 
 namespace WebUI.Controllers
 {
@@ -23,6 +24,8 @@ namespace WebUI.Controllers
             _blogService = blogService;
         }
 
+        [HandleError(View = "IncorrectPageError")]
+        [ValidatePageParameter]
         public ActionResult AllPosts(int page = 1)
         {
             var model = new PostListViewModel
@@ -40,6 +43,8 @@ namespace WebUI.Controllers
         }
 
         [Authorize]
+        [ValidatePageParameter]
+        [HandleError(View = "IncorrectPageError")]
         public ActionResult UserPosts(int page = 1)
         {
             var model = new PostListViewModel

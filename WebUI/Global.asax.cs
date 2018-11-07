@@ -60,7 +60,8 @@ namespace WebUI
                 }
             }*/
 
-            HttpContext.Current.Response.Redirect("/Home/DefaultError");
+            // Redirection to error page
+            //HttpContext.Current.Response.Redirect("/Home/DefaultError");
         }
     }
 }

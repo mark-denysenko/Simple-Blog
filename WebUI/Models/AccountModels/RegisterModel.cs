@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using WebUI.Validation.Attributes;
 
 namespace WebUI.Models.AccountModels
 {
@@ -12,6 +13,7 @@ namespace WebUI.Models.AccountModels
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
         [Required]
+        [NameNotAdminValidate]
         public string Nickname { get; set; }
         [Required]
         [DataType(DataType.Password)]
