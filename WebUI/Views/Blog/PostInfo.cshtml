@@ -16,9 +16,8 @@
                     <button type="submit" value="Delete" class="btn btn-primary">Delete post</button>
                 }
             }
-            @*@Html.ActionLink("Delete", "DeletePost", new { id = Model.Id }, new { @class = "pull-right delete-link" })*@
             <p class="author">
-                Posted by <a href="#">@Model.Author</a> on @Model.Date
+                Posted by <a href="#">@Model.Author</a> on @Model.Date.ToLocalTime()
             </p>
             <hr />
             <div class="post-body">

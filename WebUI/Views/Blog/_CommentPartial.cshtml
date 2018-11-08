@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-lg-10">
             Comment from <b class="author">@Model.Author</b>
-            <p class="comment-date pull-right">@Model.Date</p>
+            <p class="comment-date pull-right">@Model.Date.ToLocalTime()</p>
         </div>
     </div>
     <div class="row comment-body">

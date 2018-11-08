@@ -15,5 +15,6 @@ namespace WebUI.Util
         public const string PHOTO_HEIGHT = "400";
         public const string PHOTO_WIDTH = "400";
         public const int POST_PER_PAGE = 5;
+        public const string LOG_FILE = "bloglogs.txt";
     }
 }

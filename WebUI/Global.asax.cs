@@ -3,6 +3,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using NLog;
 using WebUI.Util;
 
 namespace WebUI
@@ -11,8 +12,10 @@ namespace WebUI
     {
         protected void Application_Start()
         {
+            // My configurations
             AutofacConfig.ConfigureContainer();
             AutoMapperConfig.Configure();
+            NLogConfig.Configure();
 
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
@@ -28,14 +31,16 @@ namespace WebUI
                 Response.StatusCode = httpException.GetHttpCode();
 
             // logging error
+            Logger logger = LogManager.GetCurrentClassLogger();
+            logger.Error(exception.Message);
 
-            /* Some variant of handling
-            HttpContext httpContext = HttpContext.Current;
+            // Some variant of handling
+            var httpContext = HttpContext.Current;
             if (httpContext != null)
             {
                 RequestContext requestContext = ((MvcHandler)httpContext.CurrentHandler).RequestContext;
                 /* When the request is ajax the system can automatically handle a mistake with a JSON response. 
-                   Then overwrites the default response *//*
+                   Then overwrites the default response */
                 if (requestContext.HttpContext.Request.IsAjaxRequest())
                 {
                     httpContext.Response.Clear();
@@ -54,12 +59,9 @@ namespace WebUI
                 }
                 else
                 {
-                    httpContext.Response.Redirect("~/DefaultError");
+                    httpContext.Response.Redirect("/Home/DefaultError");
                 }
-            }*/
-
-            // Redirection to error page
-            //HttpContext.Current.Response.Redirect("/Home/DefaultError");
+            }
         }
     }
 }

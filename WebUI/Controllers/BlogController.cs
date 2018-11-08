@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI;
 using BusinessLayer.BusinessModelsDTO;
 using BusinessLayer.Interfaces;
 using WebUI.Models.BlogModels;
@@ -61,6 +62,7 @@ namespace WebUI.Controllers
             return View(model);
         }
 
+        [OutputCache(Duration = 15, Location = OutputCacheLocation.Server, VaryByParam = "id")]
         public ActionResult PostInfo(int? id)
         {
             if (!id.HasValue)

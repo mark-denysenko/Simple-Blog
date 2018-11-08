@@ -81,16 +81,6 @@ namespace WebUI.Controllers
         {
             UserProfile profile = _accountService.GetUserProfile(User.Identity.Name);
 
-            //var userInfo = new ProfileModel
-            //{
-            //    Email = currentUser.Email,
-            //    Nickname = currentUser.Nickname,
-            //    PasswordHash = currentUser.PasswordHash,
-            //    UserId = currentUser.UserId,
-            //    TotalComments = currentUser.Comments.Count,
-            //    TotalPosts = currentUser.Posts.Count
-            //};
-
             return View(profile);
         }
 
