@@ -13,5 +13,6 @@ namespace BusinessLayer.Interfaces
         bool Login(string nickname, string password);
         bool Register(string nickname, string password, string email);
         UserProfile GetUserProfile(string nickname);
+        IEnumerable<string> GetAllNicknames();
     }
 }

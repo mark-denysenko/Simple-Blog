@@ -15,6 +15,12 @@ namespace WebUI.Controllers
             return View();
         }
 
+        [Authorize]
+        public ActionResult Chat()
+        {
+            return View();
+        }
+
         public ActionResult DefaultError()
         {
             return View();

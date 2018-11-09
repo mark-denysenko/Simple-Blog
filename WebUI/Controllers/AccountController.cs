@@ -113,5 +113,10 @@ namespace WebUI.Controllers
 
             return RedirectToAction("Profile");
         }
+
+        public ActionResult ListOfUsers()
+        {
+            return View(_accountService.GetAllNicknames());
+        }
     }
 }

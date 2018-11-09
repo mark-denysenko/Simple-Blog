@@ -82,3 +82,13 @@ A:hover {
 .comment {
     padding: 10px 20px;
 }
+
+.chat > ul {
+    list-style-type: none;
+}
+
+#discussion {
+    overflow-y: scroll;
+    height: 250px;
+    width: 400px;
+}

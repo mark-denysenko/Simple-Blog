@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Core;
@@ -60,6 +61,11 @@ namespace BusinessLayer
             _uow.Users.Save();
 
             return true;
+        }
+
+        public IEnumerable<string> GetAllNicknames()
+        {
+            return _uow.Users.GetAll().Select(u => u.Nickname);
         }
     }
 }
