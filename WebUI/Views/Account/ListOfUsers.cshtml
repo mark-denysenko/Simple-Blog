@@ -3,17 +3,55 @@
     ViewBag.Title = "List of users";
 }
 
-<h2>All registered users</h2>
+<h1>All registered users</h1>
 
-<div class="user-list">
+<div id="user-list" class="well">
 
 </div>
 
 @section scripts
 {
     <script>
-        $(function() {
+        function printUsers(users) {
+            var userList = $('#user-list');
+            userList.empty();
 
-        })
+            userList.append('<table class="table-bordered" width="150">');
+            for (let i = 0; i < users.length; i++) {
+                userList.append('<tr><td>' + users[i] + '</td></tr>');
+            }
+            userList.append('</table>');
+
+            setUserColor();
+        };
+
+        function hashCode(str) {
+            var hash = 0;
+            for (var i = 0; i < str.length; i++) {
+                hash = str.charCodeAt(i) + ((hash << 5) - hash);
+            }
+            return hash;
+        } 
+
+        function intToRGB(i){
+            var c = (i & 0x00FFFFFF)
+                .toString(16)
+                .toUpperCase();
+
+            return "00000".substring(0, 6 - c.length) + c;
+        }
+
+        function setUserColor() {
+
+            $('#user-list td').each(function (index, userTd) {
+                $(this).css('background-color', '#' + intToRGB(hashCode(userTd.innerHTML)));
+            });
+        };
+        
+        function loadUserList() {
+            $.getJSON('@Url.Action("JsonUserList")', printUsers);
+        };
+
+        $(loadUserList);
     </script>
 }
