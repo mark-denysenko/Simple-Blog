@@ -121,7 +121,7 @@ namespace WebUI.Controllers
 
         public JsonResult JsonUserList()
         {
-            return Json(_accountService.GetAllNicknames(), JsonRequestBehavior.AllowGet);
+            return Json(_accountService.GetAllNicknames().Reverse(), JsonRequestBehavior.AllowGet);
         }
     }
 }
